@@ -84,3 +84,16 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
 x_test_out = np.array(data_test.drop(['Outcome'], 1))
 y_test_out = np.array(data_test.Outcome)
+
+random = RandomForestClassifier()
+logreg = LogisticRegression(solver='lbfgs', max_iter = 7600)
+arbol = DecisionTreeClassifier()
+red = MLPClassifier()
+probabilistico = GaussianNB()
+
+print("Dataset diabetes")
+metricas(red, "Multilayer perceptron")
+metricas(logreg, "Regresión logística")
+metricas(arbol, "Arbol de decisión")
+metricas(red, "Naive bayes")
+metricas(random, "Random Forest")
