@@ -28,3 +28,42 @@ rangos = [0, 8, 15, 18, 25, 40, 60, 100]
 nombres = ['1', '2', '3', '4', '5', '6', '7']
 bank.age = pd.cut(bank.age, rangos, labels=nombres)
 bank.dropna(axis=0,how='any', inplace=True)
+
+data_train = bank[:36168]
+data_test = bank[36168:]
+
+x = np.array(data_train.drop(['y'], 1))
+y = np.array(data_train.y)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+x_test_out = np.array(data_test.drop(['y'], 1))
+y_test_out = np.array(data_test.y)
+
+def metricas(modelo, nombre):
+    print('*'*50)
+    print(f'Modelo {nombre}')
+    
+    modelo.fit(x_train, y_train)
+    
+    # Accuracy de Entrenamiento de Entrenamiento
+    print(f'accuracy de Entrenamiento de Entrenamiento: {modelo.score(x_train, y_train)}')
+
+    # Accuracy de Test de Entrenamiento
+    print(f'accuracy de Test de Entrenamiento: {modelo.score(x_test, y_test)}')
+
+    # Accuracy de Validación
+    print(f'accuracy de Validación: {modelo.score(x_test_out, y_test_out)}')
+
+random = RandomForestClassifier()
+logreg = LogisticRegression(solver='lbfgs', max_iter = 7600)
+arbol = DecisionTreeClassifier()
+red = MLPClassifier()
+probabilistico = GaussianNB()
+
+print("Dataset bank")
+metricas(red, "Multilayer perceptron")
+metricas(logreg, "Regresión logística")
+metricas(arbol, "Arbol de decisión")
+metricas(red, "Naive bayes")
+metricas(random, "Random Forest")
