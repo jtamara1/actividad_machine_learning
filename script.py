@@ -97,3 +97,37 @@ metricas(logreg, "Regresión logística")
 metricas(arbol, "Arbol de decisión")
 metricas(red, "Naive bayes")
 metricas(random, "Random Forest")
+
+weather = pd.read_csv("./DataSets/weatherAUS/weatherAUS.csv")
+weather = weather.drop(['Date'], 1)
+weather.Location = weather.Location.replace(['Albury', 'BadgerysCreek', 'Cobar', 'CoffsHarbour', 'Moree', 'Newcastle', 'NorahHead', 'NorfolkIsland', 'Penrith', 'Richmond', 'Sydney', 'SydneyAirport', 'WaggaWagga', 'Williamtown', 'Wollongong', 'Canberra', 'Tuggeranong', 'MountGinini', 'Ballarat', 'Bendigo', 'Sale', 'MelbourneAirport', 'Melbourne', 'Mildura', 'Nhil', 'Portland', 'Watsonia', 'Dartmoor', 'Brisbane', 'Cairns', 'GoldCoast', 'Townsville', 'Adelaide', 'MountGambier', 'Nuriootpa', 'Woomera', 'Albany', 'Witchcliffe', 'PearceRAAF', 'PerthAirport', 'Perth', 'SalmonGums', 'Walpole', 'Hobart', 'Launceston', 'AliceSprings', 'Darwin', 'Katherine', 'Uluru'] , [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48])
+weather.WindGustDir = weather.WindGustDir.replace(['SSW', 'S', 'NNE', 'WNW', 'N', 'SE', 'ENE', 'NE', 'E', 'SW', 'W', 'WSW', 'NNW', 'ESE', 'SSE', 'NW'], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+weather.WindDir9am = weather.WindDir9am.replace(['ENE', 'SSE', 'NNE', 'WNW', 'NW', 'N', 'S', 'SE', 'NE', 'W', 'SSW', 'E', 'NNW', 'ESE', 'WSW', 'SW'],[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+weather.WindDir3pm = weather.WindDir3pm.replace(['SW', 'SSE', 'NNW', 'WSW', 'WNW', 'S', 'ENE', 'N', 'SE', 'NNE', 'NW', 'E', 'ESE', 'NE', 'SSW', 'W'],[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+weather.RainToday = weather.RainToday.replace(['No', 'Yes'],[0, 1])
+weather.RainTomorrow = weather.RainTomorrow.replace(['No', 'Yes'],[0, 1])
+weather.dropna(axis=0,how='any', inplace=True)
+
+data_train = weather[:45136]
+data_test = weather[45136:]
+
+x = np.array(data_train.drop(['RainTomorrow'], 1))
+y = np.array(data_train.RainTomorrow)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+x_test_out = np.array(data_test.drop(['RainTomorrow'], 1))
+y_test_out = np.array(data_test.RainTomorrow)
+
+random = RandomForestClassifier()
+logreg = LogisticRegression(solver='lbfgs', max_iter = 7600)
+arbol = DecisionTreeClassifier()
+red = MLPClassifier()
+probabilistico = GaussianNB()
+
+print("Dataset weather")
+metricas(red, "Multilayer perceptron")
+metricas(logreg, "Regresión logística")
+metricas(arbol, "Arbol de decisión")
+metricas(red, "Naive bayes")
+metricas(random, "Random Forest")
