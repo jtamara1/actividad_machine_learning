@@ -67,3 +67,20 @@ metricas(logreg, "Regresión logística")
 metricas(arbol, "Arbol de decisión")
 metricas(red, "Naive bayes")
 metricas(random, "Random Forest")
+
+diabetes = pd.read_csv("./DataSets/Prima Indians Diabetes Database/diabetes.csv")
+rangos = [0, 8, 15, 18, 25, 40, 60, 100]
+nombres = ['1', '2', '3', '4', '5', '6', '7']
+diabetes.Age = pd.cut(diabetes.Age, rangos, labels=nombres)
+diabetes.dropna(axis=0,how='any', inplace=True)
+
+data_train = diabetes[:614]
+data_test = diabetes[614:]
+
+x = np.array(data_train.drop(['Outcome'], 1))
+y = np.array(data_train.Outcome)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+x_test_out = np.array(data_test.drop(['Outcome'], 1))
+y_test_out = np.array(data_test.Outcome)
